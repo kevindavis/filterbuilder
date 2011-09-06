@@ -14,7 +14,7 @@ var comparators = {
 			"ArgumentDefaults" : [] },
 		 {"Comparator" : "greater than",
 			"ArgumentCount" : 1,
-			"ArgumentDefaults" : [] },ß
+				"ArgumentDefaults" : [] },
 		 {"Comparator" : "less than",
 			"ArgumentCount" : 1,
 			"ArgumentDefaults" : [] },
@@ -29,6 +29,15 @@ var comparators = {
 			"ArgumentDefaults" : [] },
 		 {"Comparator" : "is not",
 			"ArgumentCount" : 1,
+			"ArgumentDefaults" : [] },
+		 {"Comparator" : "before",
+			"ArgumentCount" : 1,
+			"ArgumentDefaults" : [] },
+		 {"Comparator" : "after",
+			"ArgumentCount" : 1,
+			"ArgumentDefaults" : [] },
+			{"Comparator" : "between",
+			"ArgumentCount" : 2,
 			"ArgumentDefaults" : [] }
 		],
 		
@@ -38,40 +47,52 @@ var comparators = {
 			"ArgumentDefaults" : [] },
 		 {"Comparator" : "is not",
 			"ArgumentCount" : 1,
+			"ArgumentDefaults" : [] },
+		 {"Comparator" : "contains",
+			"ArgumentCount" : 1,
+			"ArgumentDefaults" : [] },
+		 {"Comparator" : "does not contain",
+			"ArgumentCount" : 1,
+			"ArgumentDefaults" : [] },
+		 {"Comparator" : "begins with",
+			"ArgumentCount" : 1,
+			"ArgumentDefaults" : [] },
+		 {"Comparator" : "ends with",
+			"ArgumentCount" : 1,
 			"ArgumentDefaults" : [] }
 		]
 };
 
-function setup(fields){
+function setup(fields, existing_clauses){
 
 	// create a template that looks like:
 	// <div class="clause">
 	// 	<select class="fields">
-	// 		<option value="FieldType1">FieldName1</option>
-	// 		<option value="FieldType2">FieldName2</option>
+	// 		<option data-fieldtype="FieldType1">FieldName1</option>
+	// 		<option data-fieldtype="FieldType2">FieldName2</option>
 	// 	</select>
 	//  <select class="comparators"></select>
 	// 	<span class="conditions"></span>
 	// 	<button class="remove-clause">remove</button>
 	// </div>
 	template = $("<div/>", { class: "clause" } );
-	var dropdown = $("<select/>", { class: "fields"});
+	var fields_dropdown = $("<select/>", { class: "fields"});
 	for(var i in fields)
 	{
 		$("<option/>")
-			.attr("value", fields[i].FieldType)
+			.attr("data-fieldtype", fields[i].FieldType)
 			.text(fields[i].FieldName)
-			.appendTo(dropdown);
+				.appendTo(fields_dropdown);
 	}
-	dropdown.change(function(){
-		adjustField($(this).parent(), $(this).val());
+	fields_dropdown.change(function(){
+		adjustField($(this).parent(), $(this).find('option:selected').attr('data-fieldtype'));
 	});
-	dropdown.appendTo(template);
-	var comparators = $("<select/>", { class: "comparators"})
-	comparators.change(function(){
+	fields_dropdown.appendTo(template);
+	var comparators_dropdown = $("<select/>", { class: "comparators"})
+	comparators_dropdown.change(function(){
 			adjustComparator($(this).parent(), $(this).val());
 		})
-	comparators.appendTo(template);
+		comparators_dropdown.appendTo(template);
 	$("<span/>", { class: "conditions"})
 		.appendTo(template);
 	$("<button/>")
@@ -83,7 +104,9 @@ function setup(fields){
 
 	adjustField(template, fields[0].FieldType);
 	
-	template.clone(true).appendTo('#clauses');
+	if(existing_clauses.size == 0){
+		template.clone(true).appendTo('#clauses');
+	}
 				
 	// hydrate the existing clauses
 	for(var i in existing_clauses)
@@ -93,11 +116,41 @@ function setup(fields){
 }
 
 function addClause(clause){
+	
+	var new_clause = template.clone(true);
+	
 	if(clause){
 		
-	} else {
-		template.clone(true).appendTo('#clauses');
+		// Expects a clause that looks like:
+		// {
+		// 	"FieldName" : "Title",
+		// 	"Condition" : {
+		// 		"Comparator" : "is",
+		// 		"Arguments" : ["1984"]
+		// 	}
+		// },
+
+		// set the field
+		new_clause.find('.fields').val(clause.FieldName);
+		adjustField(new_clause, $('.fields option:selected', new_clause).attr('data-fieldtype'));
+		
+		// set the comparator
+		new_clause.find('.comparators').val(clause.Condition.Comparator);
+		adjustComparator(new_clause, clause.Condition.Comparator);
+		
+		// fill in the arguments
+		var inputs = new_clause.find('.conditions input');
+		if(clause.Condition.Arguments.length == 1){
+			inputs.val(clause.Condition.Arguments[0]);
+		} else {
+			for (var i in clause.Condition.Arguments){
+				inputs[i].value = clause.Condition.Arguments[i];
+			}			
+			
+		}
 	}
+	
+	new_clause.appendTo('#clauses');
 }
 		
 // change the condition UI to fit the selected field
@@ -128,7 +181,7 @@ function adjustComparator(clause, comparator){
 	
 	// form the comparator object out of a string
 	if(typeof(comparator) == 'string'){		
-		var fieldtype = clause.find(".fields").val();
+		var fieldtype = clause.find(".fields option:selected").attr('data-fieldtype');
 		for (var i in comparators[fieldtype]){
 			if (comparators[fieldtype][i].Comparator == comparator){
 				comparator = comparators[fieldtype][i];
@@ -136,7 +189,6 @@ function adjustComparator(clause, comparator){
 		}
 	}
 	
-	// switch on number of arguments
 	switch(comparator.ArgumentCount)
 	{
 		case 1:

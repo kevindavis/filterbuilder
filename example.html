@@ -32,8 +32,32 @@
 			}
 		];
 		
+		var existing_clauses = [
+			{
+				"FieldName" : "Title",
+				"Condition" : {
+					"Comparator" : "is",
+					"Arguments" : ['1984']
+				}
+			},
+			{
+				"FieldName" : "PageCount",
+				"Condition" : {
+					"Comparator" : "between",
+					"Arguments" : ['100','200']
+				}
+			},
+			{
+				"FieldName" : "PublishDate",
+				"Condition" : {
+					"Comparator" : "before",
+					"Arguments" : ['Jan 1, 1984']
+				}
+			}
+		] ;
+		
 		$(document).ready(function() {
-			setup(fields);
+			setup(fields, existing_clauses);
 			$("#add-clause").click(function() {
 				addClause();
 			});
