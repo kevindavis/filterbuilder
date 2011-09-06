@@ -4,7 +4,6 @@
 * nicer looking remove
 
 ## Bigger issues
-* should build clauses up from JSON representation
 * should actually spit out a JSON representation
 * rework data structure so don't have to loop through to find elements (comparator as key in the hash?)
 * any/all switch? 
