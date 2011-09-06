@@ -10,3 +10,4 @@
 * any/all switch? 
 * allow user to refer to fields?
 * package as a JQuery plugin
+* mechanism for attaching a function to arguments so you can do things like make it an autocomplete, date picker etc

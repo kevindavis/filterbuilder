@@ -1,8 +1,8 @@
-== What is this thing? ==
+## What is this thing?
 
 Filter Builder is some javascript UI for building up a filter in a data driven application. You've used something similar if you've built a smart playlist in iTunes.
 
-== How do I use it? == 
+## How do I use it?
 
 *Short version* : check out the example
 
