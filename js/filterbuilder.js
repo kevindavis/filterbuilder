@@ -20,9 +20,7 @@ $(function(){
 			date: 	['is', 'is not', 'between', 'before', 'after'],
 			number: ['is', 'is not', 'between', 'less than', 'greater than']
 		},
-
-		ARGUMENT_COUNTS: {'string': 1}
-
+		
 		defaults: function(){
 			return {
 				field: fields.at(0), 
