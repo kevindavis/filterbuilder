@@ -112,6 +112,7 @@ $(function(){
 			this.model.set({'comparator': new_comparator});
 
 			this.render();
+			this.$el.children('input').focus();
 		},
 
 		changeComparator: function(){
@@ -122,6 +123,7 @@ $(function(){
 				this.model.set({'values': [old_value, old_value]});
 			}
 			this.render();
+			this.$el.children('input').focus();
 		},
 
 		changeValue: function(){
