@@ -4,7 +4,7 @@ Filter Builder is some javascript UI for building up a filter in a data driven a
 
 ## How do I use it?
 
-check out the example
+Check out the example
 
 ## What can this thing filter?
 
