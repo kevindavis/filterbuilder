@@ -71,7 +71,7 @@
 		<% }); %>
 		</select>
 		
-		<select class="clause-comparator input-small">
+		<select class="clause-comparator input-medium">
 		<% _.each(COMPARATORS[field.fieldType], function(c) { %>
 			<option <%= c == comparator ? 'selected' : '' %>>
 				<%= c %>
