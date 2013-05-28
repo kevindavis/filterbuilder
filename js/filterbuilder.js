@@ -20,7 +20,7 @@ $(function(){
 			date: 	['is', 'is not', 'between', 'before', 'after'],
 			number: ['is', 'is not', 'between', 'less than', 'greater than']
 		},
-		
+
 		defaults: function(){
 			return {
 				field: fields.at(0), 
