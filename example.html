@@ -13,7 +13,7 @@
 </head>
 <body>
 	<div id="filterbuilder">
-		<span id="description">Items with all of the conditions will be returned</span>
+		<p id="description">Items with all of the conditions will be returned</p>
 		<div id="clauses">
 			<!-- clauses go here -->
 		</div>
@@ -63,7 +63,7 @@
 
 	<script src="js/filterbuilder.js" type="text/javascript"></script>
 	<script type="text/template" id="clause-template">
-		<select class="clause-field">
+		<select class="clause-field input-medium">
 		<% _.each(fields, function(f) { %>
 			<option <%= field.fieldName == f.fieldName ? 'selected' : '' %>>
 				<%= f.fieldName %>
@@ -71,7 +71,7 @@
 		<% }); %>
 		</select>
 		
-		<select class="clause-comparator">
+		<select class="clause-comparator input-small">
 		<% _.each(COMPARATORS[field.fieldType], function(c) { %>
 			<option <%= c == comparator ? 'selected' : '' %>>
 				<%= c %>
@@ -80,11 +80,11 @@
 		</select>
 
 		<% if(comparator == 'between'){ %>
-			<input type="text" value="<%= values[0] %>"/>
+			<input type="text" value="<%= values[0] %>" class="input-medium"/>
 			<span>and</span>
-			<input type="text" value="<%= values[1] %>"/>			
+			<input type="text" value="<%= values[1] %>" class="input-medium"/>
 		<% } else { %>
-			<input type="text" value="<%= values[0] %>"/>
+			<input type="text" value="<%= values[0] %>" class="input-medium"/>
 		<% } %>
 
 		<a href="#" class="destroy"><i class="icon-remove"/></a>
