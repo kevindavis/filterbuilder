@@ -171,6 +171,7 @@ $(function(){
 			c = clauses.create(new Clause);
 			var vc = new ClauseView({model: c});
 			this.$('#clauses').append(vc.render().el);
+			this.$('#clauses input:last').focus();
 		}
 	});
 
